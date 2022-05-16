@@ -34,6 +34,7 @@ class OrderViewState extends State<OrderView> {
   late Future _currentOrders, _previousOrders;
   var selected;
   bool _isCurrent = true;
+  String CurrentTransactId = "";
   //variables end
   @override
   void initState() {
@@ -94,7 +95,7 @@ class OrderViewState extends State<OrderView> {
       if (value.value != null) {
         Map temp = (value.value as Map);
         temp.forEach((key, value) {
-          finaleList.add(value);
+          finaleList.add({"key": key, "value": value});
         });
       }
     });
@@ -103,6 +104,120 @@ class OrderViewState extends State<OrderView> {
     print(finaleList.length);
     print(finaleList);
     return finaleList;
+  }
+
+  _getExpandData(String transactionID) async {
+    print("is called on " + transactionID);
+    if (transactionID.length == 0) return null;
+    List list = [];
+    final Orders =
+        database.child('OrderedItems').orderByKey().equalTo(transactionID);
+    var jk = await Orders.get().then((value) {
+      if (value.value == null) return null;
+      Map temp = (value.value as Map);
+
+      temp.forEach((key, value) {
+        Map temptemp = value as Map;
+        temptemp.forEach((key, value) {
+          list.add(value);
+        });
+      });
+    });
+    if (list.isEmpty) return null;
+    print("list is");
+    print(list);
+    return list;
+  }
+
+  _orginExpanded() {
+    Widget fj = FutureBuilder(
+      future: _getExpandData(CurrentTransactId),
+      builder: (context, entryData) {
+        switch (entryData.connectionState) {
+          case ConnectionState.none:
+            return Container();
+
+          case ConnectionState.waiting:
+            return const Center(
+              child: CupertinoActivityIndicator(),
+            );
+
+          case ConnectionState.active:
+            return Container();
+          case ConnectionState.done:
+            {
+              print(entryData.data);
+              if (entryData.hasData) {
+                List list = entryData.data as List;
+                return Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ListTile(
+                        title: Row(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: Text("foodName"),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.1,
+                              child: Text("qty"),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.15,
+                              child: Text("price"),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.15,
+                              child: Text("result"),
+                            )
+                          ],
+                        ),
+                      ),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: list.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Row(children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  child: Text(list[index]["foodName"]),
+                                ),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.1,
+                                  child: Text(list[index]["qty"].toString()),
+                                ),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.15,
+                                  child: Text(list[index]["price"].toString()),
+                                ),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.15,
+                                  child: Text(list[index]["result"].toString()),
+                                )
+                              ]),
+                            );
+                          }),
+                    ],
+                  ),
+                );
+              } else {
+                return Container(
+                  child: Text("hully"),
+                );
+              }
+            }
+        }
+      },
+    );
+    return fj;
   }
 
   @override
@@ -387,7 +502,7 @@ class OrderViewState extends State<OrderView> {
                                                                       .width *
                                                                   0.25,
                                                               child: Text(
-                                                                list[index][
+                                                                list[index]["value"]![
                                                                         "token"]
                                                                     .toString(),
                                                                 textScaleFactor:
@@ -401,7 +516,8 @@ class OrderViewState extends State<OrderView> {
                                                                       .width *
                                                                   0.25,
                                                               child: Text(
-                                                                list[index][
+                                                                list[index]["value"]
+                                                                        [
                                                                         "phone"]
                                                                     .toString(),
                                                                 textScaleFactor:
@@ -415,7 +531,7 @@ class OrderViewState extends State<OrderView> {
                                                                       .width *
                                                                   0.3,
                                                               child: Text(
-                                                                list[index]
+                                                                list[index]["value"]
                                                                         ["time"]
                                                                     .toString(),
                                                                 textScaleFactor:
@@ -430,7 +546,8 @@ class OrderViewState extends State<OrderView> {
                                                                   0.1,
                                                               child: Text(
                                                                 "₹" +
-                                                                    list[index][
+                                                                    list[index]["value"]
+                                                                            [
                                                                             "totalPrice"]
                                                                         .toString(),
                                                                 textScaleFactor:
@@ -440,13 +557,25 @@ class OrderViewState extends State<OrderView> {
                                                           ]),
                                                         ),
                                                         children: [
-                                                          Text("dumbo"),
-                                                          Text("dumbo")
+                                                          Center(
+                                                            child: Container(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.75,
+                                                              child:
+                                                                  _orginExpanded(),
+                                                            ),
+                                                          )
                                                         ],
                                                         onExpansionChanged:
                                                             ((newState) {
                                                           if (newState) {
                                                             setState(() {
+                                                              CurrentTransactId =
+                                                                  list[index]
+                                                                      ["key"];
                                                               selected = index;
                                                             });
                                                           } else {
