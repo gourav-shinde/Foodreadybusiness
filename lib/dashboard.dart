@@ -13,6 +13,7 @@ import 'package:foodreadybusiness/cart.dart';
 import 'package:foodreadybusiness/editAndAddMenu.dart';
 import 'package:foodreadybusiness/main.dart';
 import 'package:foodreadybusiness/models/menu.dart';
+import 'package:foodreadybusiness/orders.dart';
 import 'package:foodreadybusiness/utils/color.dart';
 
 class DashBoardView extends StatefulWidget {
@@ -42,6 +43,10 @@ class DashBoardState extends State<DashBoardView> {
     setState(() {
       _index = index;
     });
+    if (index == 2) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => OrderView()));
+    }
   }
 
   @override
@@ -143,23 +148,6 @@ class DashBoardState extends State<DashBoardView> {
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
-        //   child: Column(
-        //     children: [
-        //       const Text("Search bar"),
-        //       SingleChildScrollView(
-        //         child: Container(
-        //             decoration: BoxDecoration(
-        //                 borderRadius: BorderRadius.circular(10),
-        //                 color: Colors.grey),
-        //             child: const ListTile(
-        //                 leading: Icon(Icons.ac_unit),
-        //                 title: Text("name"),
-        //                 subtitle: Text("description"),
-        //                 trailing: Text("price"))),
-        //       )
-        //     ],
-        //   ),
-        // ),
         child: FutureBuilder(
           future: _menu,
           builder: (context, entryData) {
