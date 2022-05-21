@@ -35,6 +35,7 @@ class OrderViewState extends State<OrderView> {
   var selected;
   bool _isCurrent = true;
   String CurrentTransactId = "";
+  List<int> _state = [];
   //variables end
   @override
   void initState() {
@@ -81,6 +82,7 @@ class OrderViewState extends State<OrderView> {
           }
         });
         finaleList.add([transaction_id, tempo]);
+        _state.add(0);
       }
     }
     print(finaleList);
@@ -210,7 +212,7 @@ class OrderViewState extends State<OrderView> {
                 );
               } else {
                 return Container(
-                  child: Text("hully"),
+                  child: Text("Empty"),
                 );
               }
             }
@@ -372,54 +374,103 @@ class OrderViewState extends State<OrderView> {
                                                             ],
                                                           ),
                                                         ),
-                                                        Container(
-                                                            decoration: BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                color: Colors
-                                                                    .green),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(0),
-                                                            child: TextButton(
-                                                              child: const Text(
-                                                                "Complete",
-                                                                textScaleFactor:
-                                                                    1,
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white),
-                                                              ),
-                                                              onPressed:
-                                                                  () async {
-                                                                final status =
-                                                                    database.child(
-                                                                        'Status');
-                                                                status
-                                                                    .child(list[
-                                                                        index][0])
-                                                                    .set("1");
+                                                        Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    print(list[index]
+                                                                            [1][
+                                                                        "value"]);
+                                                                  },
+                                                                  icon: const Icon(
+                                                                      Icons
+                                                                          .remove_red_eye_sharp)),
+                                                              Container(
+                                                                  decoration: BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10),
+                                                                      color: Colors
+                                                                          .green),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(0),
+                                                                  child: () {
+                                                                    switch (_state[
+                                                                        index]) {
+                                                                      case 0:
+                                                                        return TextButton(
+                                                                          child:
+                                                                              const Text(
+                                                                            "No Action",
+                                                                            textScaleFactor:
+                                                                                1,
+                                                                            style:
+                                                                                TextStyle(color: Colors.white),
+                                                                          ),
+                                                                          onPressed:
+                                                                              () {
+                                                                            setState(() {
+                                                                              _state[index] = 1;
+                                                                            });
+                                                                          },
+                                                                        );
 
-                                                                refresh = true;
-                                                                setState(() {});
-                                                                list.removeAt(
-                                                                    index);
-                                                                Timer(
-                                                                    const Duration(
-                                                                        milliseconds:
-                                                                            50),
-                                                                    () {
-                                                                  refresh =
-                                                                      false;
-                                                                  setState(
-                                                                      () {});
-                                                                });
-                                                                print(list
-                                                                    .length);
-                                                              },
-                                                            ))
+                                                                      case 1:
+                                                                        return TextButton(
+                                                                            child:
+                                                                                const Text(
+                                                                              "Preparing",
+                                                                              textScaleFactor: 1,
+                                                                              style: TextStyle(color: Colors.white),
+                                                                            ),
+                                                                            onPressed:
+                                                                                () {
+                                                                              setState(() {
+                                                                                _state[index] = 2;
+                                                                              });
+                                                                            });
+
+                                                                      case 2:
+                                                                        return TextButton(
+                                                                          child:
+                                                                              const Text(
+                                                                            "Done",
+                                                                            textScaleFactor:
+                                                                                1,
+                                                                            style:
+                                                                                TextStyle(color: Colors.white),
+                                                                          ),
+                                                                          onPressed:
+                                                                              () async {
+                                                                            final status =
+                                                                                database.child('Status');
+                                                                            status.child(list[index][0]).set("1");
+
+                                                                            refresh =
+                                                                                true;
+                                                                            setState(() {});
+                                                                            list.removeAt(index);
+                                                                            _state.removeAt(index);
+                                                                            Timer(const Duration(milliseconds: 50),
+                                                                                () {
+                                                                              refresh = false;
+                                                                              setState(() {});
+                                                                            });
+                                                                            print(list.length);
+                                                                          },
+                                                                        );
+
+                                                                      default:
+                                                                        return Text(
+                                                                            "Error");
+                                                                    }
+                                                                  }())
+                                                            ])
                                                       ],
                                                     ),
                                                   ),
@@ -599,4 +650,25 @@ class OrderViewState extends State<OrderView> {
       ),
     );
   }
+}
+
+void dialogOption(context, MenuModel curModel) {
+  Navigator.of(context).push(DialogRoute(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text("Select your Action for " + curModel.name),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text(
+                "Okay",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      }));
 }
