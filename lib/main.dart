@@ -8,11 +8,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:foodreadybusiness/signup.dart';
 import 'package:foodreadybusiness/dashboard.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) {
     await Firebase.initializeApp();
+    // FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.instance;
   }
   if (FirebaseAuth.instance.currentUser != null) {
     runApp(const MyApp(true));
@@ -34,10 +36,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       debugShowMaterialGrid: false,
-      home: DashBoardView(),
-      // home: (auth == true)
-      //     ? DashBoardView()
-      //     : const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: DashBoardView(),
+      home: (auth == true)
+          ? DashBoardView()
+          : const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

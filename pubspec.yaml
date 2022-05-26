@@ -55,6 +55,8 @@ dev_dependencies:
   firebase_messaging: ^11.2.12
   flutter_local_notifications: ^9.4.0
   intl_phone_field: ^3.1.0
+  image_picker: ^0.8.2
+  firebase_app_check: ^0.0.6+12
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -74,6 +76,7 @@ flutter:
   assets:
     - images/Arsenel_logo.png
     - images/spinning-loading.gif
+    - images/noImage.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

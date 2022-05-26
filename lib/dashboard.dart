@@ -400,27 +400,65 @@ class DashBoardState extends State<DashBoardView> {
           },
         ),
       ),
-      floatingActionButton: Container(
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-        ),
-        child: IconButton(
-          icon: const Icon(
-            Icons.shopping_cart,
-            color: Colors.black,
-            size: 35,
-          ),
-          onPressed: () async {
-            print("pressed");
-            final result = await Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CartView(cartvalue2)));
-            if (result == 200) {
-              cartvalue2 = {};
-              setState(() {});
-            }
-            //go to cart view
-          },
+      floatingActionButton: Align(
+        alignment: Alignment.bottomRight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.shopping_cart,
+                    color: Colors.black,
+                    size: 35,
+                  ),
+                  onPressed: () async {
+                    print("pressed");
+                    final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CartView(cartvalue2)));
+                    if (result == 200) {
+                      cartvalue2 = {};
+                      setState(() {});
+                    }
+                    //go to cart view
+                  },
+                )),
+            const SizedBox(
+              width: 10,
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.add,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  print("pressed");
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => addandEditMenuView(
+                                  false, MenuModel("", "", 0, "", ""))))
+                      .then((value) {
+                    _menu = getMenu();
+                    setState(() {});
+                  });
+
+                  //go to cart view
+                },
+              ),
+            )
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
