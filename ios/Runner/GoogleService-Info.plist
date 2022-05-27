@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>704042222367-hfoos3rpaso3n230sbir39lsiv8g2h3s.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.704042222367-hfoos3rpaso3n230sbir39lsiv8g2h3s</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>704042222367-09diildk4i9305emfk2qvcqr5hn1d2oo.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDsQ-CoF-oNKrppYtSU3JWIP0POr7HG97Y</string>
+	<key>GCM_SENDER_ID</key>
+	<string>704042222367</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.foodreadybusiness</string>
+	<key>PROJECT_ID</key>
+	<string>canteen-management-systems</string>
+	<key>STORAGE_BUCKET</key>
+	<string>canteen-management-systems.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:704042222367:ios:990d06afed9c662f1a262a</string>
+	<key>DATABASE_URL</key>
+	<string>https://canteen-management-systems.firebaseio.com</string>
+</dict>
+</plist>
